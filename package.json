@@ -1,0 +1,14 @@
+{
+  "name": "tennu-admin-cooldown",
+  "version": "1.0.0",
+  "description": "A plugin for tennu that provides admin access to normal users for select tennu plugins",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victorio Berra",
+  "license": "WTFPL",
+  "dependencies": {
+    "moment": "^2.10.6"
+  }
+}
