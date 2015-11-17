@@ -1,4 +1,4 @@
-# tennu-admin-cooldown 1.0.0
+# tennu-admin-cooldown 1.0.1
 
 A plugin for the [tennu](https://github.com/Tennu/tennu) irc framework.
 
@@ -14,6 +14,15 @@ This plugin is for usage with select existing plugins that support it.
 "say": {
     "cooldown": 103
 },
+"google": {
+    "cooldown": 10
+},
+"correction": {
+    "cooldown": 10
+},
+"title": {
+    "cooldown": 10
+},
 ```
 
 ### Installing Into Tennu
@@ -23,19 +32,3 @@ See Downloadable Plugins [here](https://tennu.github.io/plugins/).
 ### Todo:
 
 - Tests
- 
-### License
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
-
- Copyright (C) 2015 Victorio Berra
-
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
-  0. You just DO WHAT THE FUCK YOU WANT TO.
