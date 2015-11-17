@@ -1,4 +1,4 @@
-# tennu-admin-cooldown 1.0.1
+# tennu-admin-cooldown
 
 A plugin for the [tennu](https://github.com/Tennu/tennu) irc framework.
 
