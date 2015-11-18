@@ -1,72 +1,50 @@
+var Promise = require("bluebird");
 var moment = require('moment');
+var format = require('util').format;
 
 var AdminCooldown = {
     requiresRoles: ['admin'],
-    role: "admin-cooldown",
+    role: "cooldown",
     init: function(client, imports) {
 
-        client._logger.notice('Cooldowns enabled.');
+        var plugins = client.config("plugins");
+        if (plugins[0] !== 'admin' && plugins[1].indexOf('cooldown') === -1) {
+            client._logger.warn('tennu-cooldown: it is highly recommended tennu-admin and tennu-cooldown be the first two plugins in your config.');
+        }
 
-        var cachedHosts = [];
+        const get = function(cooldownTime) {
 
-        const isAdmin = function(hostmask, callerPluginName) {
-            var now = new Date();
-            return imports.admin.isAdmin(hostmask).then(function(isadmin) {
-                if (!isadmin) {
-                    // if we cant find a cooldown specified, warn and leave
-                    var cooldownTime = client.config(callerPluginName).cooldown;
-                    var cacheHit = false;
-                    for (var i = cachedHosts.length; i--;) {
-                        if(cachedHosts[i].hostname === hostmask.hostname)
-                        {
-                            cacheHit = cachedHosts[i];
-                        }
-                    }
-                    if (cacheHit) {
-                        var timestamp = new Date(cacheHit.timestamp);
-                        var expiresOn = timestamp.setSeconds(timestamp.getSeconds() + cooldownTime);
-                        var nowTime = now.getTime();
-                        if (nowTime > expiresOn) {
-                            cacheHit.timestamp = now;
-                            return true;
-                        }
-                        else {
-                            client.notice(hostmask.nickname, 'Command ready again ' + new moment(expiresOn).from(new moment(nowTime)));
-                            return false;
-                        }
-                    }
-                    else {
-                        cachedHosts.push({
-                            "hostname": hostmask.hostname,
-                            "timestamp": now
-                        });
-                        return true;
-                    }
-                }
+            var cache = require('./cache')([]);
 
-                return isadmin;
-            });
-        };
-        
-        // Untested
-        const requiresAdmin = function (fn) {
-            return function (command) {
-                return isAdmin(command.hostmask)
-                .then(function (isAdmin) {
-                    if (isAdmin) {
-                        return fn(command);
-                    } else {
-                        return 'Cooldown in progress.';
+            return function(hostmask) {
+                return Promise.try(function() {
+                    return imports.admin.isAdmin(hostmask);
+                }).then(function(isadmin) {
+
+                    // Admin override
+                    if (isadmin) {
+                        return;
                     }
+
+                    // Search for an object in cache
+                    var cacheHit = cache.isExists(hostmask.hostname);
+                    if (!cacheHit) {
+                        cache.add(hostmask.hostname);
+                        return
+                    }
+
+                    if (!cache.isExpired(cacheHit, cooldownTime)) {
+                        var errorMsg = format('Command ready again %s', new moment(cache.expiresOn(cacheHit, cooldownTime)).from(moment()));
+                        throw new Error(errorMsg);
+                    }
+
+                    cache.reset(cacheHit);
                 });
-            };
-        };
+            }
+        }
 
         return {
-            exports: {
-                isAdmin: isAdmin,
-                requiresAdmin: requiresAdmin
-            },
+            exports: get,
         }
     }
 };
