@@ -41,15 +41,17 @@ var PluginThatUsesAdminCooldown = {
             ]
         };
 
+        // Always throw a helpful error when a user is missing important configuration variables for your plugin
         var shoutConfig = client.config("shout");
         if (!shoutConfig)
         {
             throw Error('tennu-tell: is missing some or all of its configuration.');
         }
 
+        // This chunk of code is what lets tennu-cooldown take over if it exists
+        // It also logs to the user that its using cooldowns
         var isShoutCooldownReady = imports.admin.isAdmin;
         var adminCooldown = client._plugins.getRole("cooldown");
-        
         if(adminCooldown)
         {
             if(!shoutConfig.cooldown) {
@@ -63,7 +65,15 @@ var PluginThatUsesAdminCooldown = {
         return {
             handlers: {
                 "!shout": function(IRCMessage) {
-                    return isAdmin(IRCMessage.hostmask).then(function(result) {
+                    return isAdmin(IRCMessage.hostmask).then(function(isadmin) {
+                    
+                        // isAdmin will be "undefined" if cooldown system is enabled
+                        // isAdmin will be true/false if cooldown system is disabled
+                        if(typeof(isadmin) === "undefined" || isadmin === true)
+                        {
+                            return 'Stop dont touch me there!';   
+                        }                    
+                    
                         if(result)
                         {
                             return 'AHH';

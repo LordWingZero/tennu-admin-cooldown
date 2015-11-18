@@ -30,7 +30,7 @@ var AdminCooldown = {
                     var cacheHit = cache.isExists(hostmask.hostname);
                     if (!cacheHit) {
                         cache.add(hostmask.hostname);
-                        return
+                        return;
                     }
 
                     if (!cache.isExpired(cacheHit, cooldownTime)) {
