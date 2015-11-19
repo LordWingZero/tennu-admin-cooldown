@@ -6,16 +6,22 @@ Allows commands normally reserved for admins, to be used by regular users with a
 
 This plugin is for usage with select existing plugins that support it.
 
+
 ## IMPORTANT
 
 ### Configuration
 
-[tennu-asay](https://github.com/LordWingZero/tennu-asay)
+- [tennu-asay](https://github.com/LordWingZero/tennu-asay)
+- [tennu-agoogle](https://github.com/Tennu/tennu-agoogle)
+- [tennu-correction](https://github.com/Tennu/tennu-correction)
+- [tennu-title](https://github.com/LordWingZero/tennu-title)
+- [tennu-tell](https://github.com/LordWingZero/tennu-tell)
+
 ```javascript
-"say": {
+"asay": {
     "cooldown": 103
 },
-"google": {
+"agoogle": {
     "cooldown": 10
 },
 "correction": {
@@ -28,6 +34,9 @@ This plugin is for usage with select existing plugins that support it.
     "cooldown": 10
 },
 ```
+
+## Developers
+
 ### Adding cooldowns into your own plugin with isAdmin fallback
 
 ```Javascript
@@ -50,14 +59,14 @@ var PluginThatUsesAdminCooldown = {
 
         // This chunk of code is what lets tennu-cooldown take over if it exists
         // It also logs to the user that its using cooldowns
-        var isShoutCooldownReady = imports.admin.isAdmin;
+        var isAdmin = imports.admin.isAdmin;
         var adminCooldown = client._plugins.getRole("cooldown");
         if(adminCooldown)
         {
             if(!shoutConfig.cooldown) {
                 client._logger.warn('shout: cooldown found, no config set.');
             } else {
-                isShoutCooldownReady = adminCooldown(shoutConfig.cooldown);
+                isAdmin = adminCooldown(shoutConfig.cooldown);
                 client._logger.notice('shout: cooldowns enabled: ' + shoutConfig.cooldown + ' seconds.');            
             }
         }
