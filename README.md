@@ -54,7 +54,7 @@ var PluginThatUsesAdminCooldown = {
         var shoutConfig = client.config("shout");
         if (!shoutConfig)
         {
-            throw Error('tennu-tell: is missing some or all of its configuration.');
+            throw Error(this.name + ': is missing some or all of its configuration.');
         }
 
         // This chunk of code is what lets tennu-cooldown take over if it exists
