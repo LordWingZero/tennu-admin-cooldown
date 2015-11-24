@@ -1,6 +1,6 @@
 {
   "name": "tennu-cooldown",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A plugin for tennu that provides admin access to normal users for select tennu plugins",
   "main": "plugin.js",
   "repository": {
