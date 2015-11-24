@@ -2,7 +2,7 @@
   "name": "tennu-cooldown",
   "version": "2.1.2",
   "description": "A plugin for tennu that provides admin access to normal users for select tennu plugins",
-  "main": "index.js",
+  "main": "plugin.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/LordWingZero/tennu-cooldown"
