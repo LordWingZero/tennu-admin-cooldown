@@ -6,6 +6,7 @@ Allows commands normally reserved for admins, to be used by regular users with a
 
 This plugin is for usage with select existing plugins that support it.
 
+All configuration values are read as **seconds**.
 
 ## IMPORTANT
 
