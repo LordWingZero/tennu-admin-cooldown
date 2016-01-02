@@ -16,10 +16,6 @@ var AdminCooldown = {
         if (!cooldownConfig || !cooldownConfig.hasOwnProperty('cooldown-commands')) {
             throw Error('[ tennu-cooldown: is missing its configuration ]');
         }
-        
-        if(cooldownConfig.hasOwnProperty('admin-commands') && !_.isArray(cooldownConfig['admin-commands'])){
-            throw Error('[ tennu-cooldown: admin-commands must be an array of commands ]');
-        }
 
         function handleCooldownCommand(hostmask, command, cooldownTime) {
             return Promise.try(function() {
@@ -51,28 +47,6 @@ var AdminCooldown = {
 
         return {
             commandMiddleware: function(command) {
-
-                // Is the command defined in the config under 'admin-commands'?
-                var forcedAdminConfigOption = _.get(cooldownConfig, 'admin-commands', false);
-                if (forcedAdminConfigOption) {
-                    var forcedAdminCommand = forcedAdminConfigOption.indexOf(command.command);
-                    if (forcedAdminCommand > -1) {
-                        return Promise.try(function() {
-                            return imports.admin.isAdmin(command.hostmask);
-                        }).then(function(result) {
-                            if (result) {
-                                return command;
-                            }
-                            client._logger.notice(format('tennu-cooldown: %s tried to run user-defined admin command: %s', command.nickname, command.command));
-                            return {
-                                intent: 'notice',
-                                query: true,
-                                message: 'Command requires admin privilege'
-                            }
-
-                        });
-                    }
-                }
 
                 // Is the command defined in the config under 'cooldown-commands'?
                 var commandCooldownTime = _.get(cooldownConfig, ['cooldown-commands', command.command], false);
