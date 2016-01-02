@@ -40,7 +40,8 @@ var AdminCooldown = {
                 if (!cache.isExpired(cacheHit, cooldownTime)) {
                     var timetill = new moment(cache.expiresOn(cacheHit, cooldownTime)).from(moment());
                     throw errors.CommandNotReadyError({
-                        'timetill': timetill
+                        'timetill': timetill,
+                        'command': command
                     });
                 }
 
